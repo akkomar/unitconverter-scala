@@ -12,9 +12,11 @@ object SwingTemperatureConverter extends SimpleSwingApplication {
 
     val celsiusInput = new TextField(4)
     val fahrenheitInput = new TextField(4)
+    val kelvinInput = new TextField(4)
 
     val fahrenheitLabel = new Label()
     val celsiusLabel = new Label()
+    val fahrenheitLabel2 = new Label()
 
     contents = new GridBagPanel {
       def addTemperatureConversionRow(row: Int, c: Constraints, inputField: TextField,
@@ -55,6 +57,7 @@ object SwingTemperatureConverter extends SimpleSwingApplication {
 
       addTemperatureConversionRow(0, c, celsiusInput, "°C = ", fahrenheitLabel, "°F")
       addTemperatureConversionRow(1, c, fahrenheitInput, "°F = ", celsiusLabel, "°C")
+      addTemperatureConversionRow(2, c, kelvinInput, "K = ", fahrenheitLabel2, "°F")
 
       border = Swing.EmptyBorder(15, 10, 10, 10)
     }
@@ -62,7 +65,7 @@ object SwingTemperatureConverter extends SimpleSwingApplication {
     minimumSize = new Dimension(400, 10)
     centerOnScreen()
 
-    listenTo(celsiusInput, fahrenheitInput)
+    listenTo(celsiusInput, fahrenheitInput, kelvinInput)
     reactions += {
       case EditDone(`fahrenheitInput`) =>
         val f = fahrenheitInput.text.toDouble
@@ -72,6 +75,10 @@ object SwingTemperatureConverter extends SimpleSwingApplication {
         val c = celsiusInput.text.toDouble
         val fahrenheit = converter.convert(Celsius(c), Fahrenheit()).t
         fahrenheitLabel.text = f"$fahrenheit%2.2f"
+      case EditDone(`kelvinInput`) =>
+        val k = kelvinInput.text.toDouble
+        val fahrenheit = converter.convert(Kelvin(k), Fahrenheit()).t
+        fahrenheitLabel2.text = f"$fahrenheit%2.2f"
     }
   }
 }
