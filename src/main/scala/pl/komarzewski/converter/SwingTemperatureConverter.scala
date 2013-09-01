@@ -5,7 +5,7 @@ import scala.swing.GridBagPanel._
 import scala.swing.event.EditDone
 
 object SwingTemperatureConverter extends SimpleSwingApplication {
-  val converter = CelsiusToFahrenheitConverter()
+  val converter = TemperatureConverter()
 
   def top = new MainFrame {
     title = "Temperature converter"
@@ -65,12 +65,12 @@ object SwingTemperatureConverter extends SimpleSwingApplication {
     listenTo(celsiusInput, fahrenheitInput)
     reactions += {
       case EditDone(`fahrenheitInput`) =>
-        val fahrenheit = fahrenheitInput.text.toDouble
-        val celsius = converter.convertToCelsius(fahrenheit)
+        val f = fahrenheitInput.text.toDouble
+        val celsius = converter.convert(Fahrenheit(f), Celsius()).t
         celsiusLabel.text = f"$celsius%2.2f"
       case EditDone(`celsiusInput`) =>
-        val celsius = celsiusInput.text.toDouble
-        val fahrenheit = converter.convertToFahrenheit(celsius)
+        val c = celsiusInput.text.toDouble
+        val fahrenheit = converter.convert(Celsius(c), Fahrenheit()).t
         fahrenheitLabel.text = f"$fahrenheit%2.2f"
     }
   }

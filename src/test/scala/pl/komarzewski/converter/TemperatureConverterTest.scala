@@ -4,7 +4,7 @@ import org.scalatest._
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.matchers.ShouldMatchers
 
-class CelsiusToFahrenheitConverterTest extends FlatSpec with TableDrivenPropertyChecks with ShouldMatchers {
+class TemperatureConverterTest extends FlatSpec with TableDrivenPropertyChecks with ShouldMatchers {
   val temperatures = Table(
     ("Celsius", "Fahrenheit"),
     (300.00, 572.00),
@@ -16,7 +16,7 @@ class CelsiusToFahrenheitConverterTest extends FlatSpec with TableDrivenProperty
     //lower values are meaningless, depending on use case we may want to throw an error in these case
   )
 
-  val converter = new CelsiusToFahrenheitConverter
+  val converter = new TemperatureConverter
 
   /**
    * Precision
@@ -26,9 +26,8 @@ class CelsiusToFahrenheitConverterTest extends FlatSpec with TableDrivenProperty
   "Celsius to Fahrenheit converter" should "properly convert C->F and F->C" in {
     forAll(temperatures) {
       (c, f) =>
-        converter.convertToCelsius(f) should (be >= c - e and be <= c + e)
-        converter.convertToFahrenheit(c) should (be >= f - e and be <= f + e)
+        converter.convert(Celsius(c), Fahrenheit()).t should (be >= f - e and be <= f + e)
+        converter.convert(Fahrenheit(f), Celsius()).t should (be >= c - e and be <= c + e)
     }
-
   }
 }
